@@ -24,6 +24,10 @@ __v1_design_specification:__
 
 ![v1_design_specification](img/v1_design_specification.png)
 
+__v1_block_design:__
+
+![v1_block_design](img/v1_block_design.png)
+
 __v1_vitis_application_outcome:__
 
 ![v1_vitis_application_outcome](img/v1_vitis_application_outcome.png)
