@@ -31,3 +31,5 @@ flow_option:
 __primitive_idea:__
 
 ![primitive_idea](lab1_related_info/img/primitive_idea.jpg)
+
+However, this idea is denied and we switch to develop an independent IP containing WISHBONE because of the tricky standard AXI interface.
