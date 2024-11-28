@@ -3,7 +3,8 @@
 #define ADDR_WIDTH 32
 #define DATA_WIDTH 32
 
-const size_t memory_size = 0x10000000 / sizeof(unsigned int);
+const size_t memory_size = 0x00000400 / sizeof(unsigned int);
+// const size_t memory_size = 256;
 
 struct WishboneInterface {
     bool cyc;    // Cycle signal
@@ -91,9 +92,9 @@ public:
             slave0->wb.addr = master->wb.addr;
             slave0->wb.data = master->wb.data;
             slave0->process();
-            master->wb.ack = slave0->wb.ack; // 确保主设备的 ack 信号被正确设置
             if (slave0->wb.ack) {
                 master->wb.data = slave0->wb.data;
+                master->wb.ack = slave0->wb.ack;
             }
         } else if (s1_sel) {
             slave1->wb.cyc = master->wb.cyc;
@@ -102,12 +103,10 @@ public:
             slave1->wb.addr = master->wb.addr;
             slave1->wb.data = master->wb.data;
             slave1->process();
-            master->wb.ack = slave1->wb.ack; // 确保主设备的 ack 信号被正确设置
             if (slave1->wb.ack) {
                 master->wb.data = slave1->wb.data;
+                master->wb.ack = slave1->wb.ack;
             }
-        } else {
-            master->wb.ack = false; // 如果地址不属于任何从设备，设置 ack 为 false
         }
     }
 };
@@ -127,9 +126,9 @@ extern "C" void hls_top(unsigned int addr, unsigned int data, bool we, bool cyc,
     WishboneArbiter arbiter;
 
     slave0.baseaddr = 0x00000000;
-    slave0.size = 0x10000000; // 256 MB
-    slave1.baseaddr = 0x10000000;
-    slave1.size = 0x10000000; // 256 MB
+    slave0.size = 0x00000400; // 1KB
+    slave1.baseaddr = 0x00000400;
+    slave1.size = 0x00000400; // 1KB
 
     arbiter.master = &master;
     arbiter.slave0 = &slave0;
