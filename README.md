@@ -25,7 +25,9 @@ __operation:__
 
 ![opration_read](lab1_related_info/img/opration_read.png)
 ![opration_write](lab1_related_info/img/opration_write.png)
-flow_option:
+
+__flow_option:__
+
 ![flow_option](lab1_related_info/img/flow_option.png)
 
 __primitive_idea:__
