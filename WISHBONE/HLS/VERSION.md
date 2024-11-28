@@ -15,9 +15,9 @@ Vitis_HLS_Application\hls_rtl_alu.c
 __code_path:__
 
 ```powershell
-hls_top.cpp
-test_hls_alu.cpp
-Vitis_HLS_Application\hls_rtl_alu.c
+hls_top_v1.cpp
+test_hls_top_v1.cpp
+Vitis_HLS_Application\hls_top_v1.c
 ```
 
 __v1_design_specification:__
@@ -31,3 +31,22 @@ __v1_block_design:__
 __v1_vitis_application_outcome:__
 
 ![v1_vitis_application_outcome](img/v1_vitis_application_outcome.png)
+
+### Read/Write WISHBONE Master/Slave Implementation with `BASEADDR`, `SIZE` and `OFFSET` (v2) <img alt="Build Status" src="https://img.shields.io/badge/build-pass-brightgreen">
+
+__v2_vitis_hls_solution_report:__
+
+![v2_vitis_hls_solution_report](img/v2_vitis_hls_solution_report.png)
+
+```powershell
+hls_top_v2.cpp
+test_hls_top_v2.cpp
+Vitis_HLS_Application\hls_top_v2.c
+```
+__v2_implemented_design_highlight:__
+
+![v2_implemented_design_highlight](img/v2_implemented_design_highlight.png)
+
+__v2_vitis_application_outcome:__
+
+![v2_vitis_application_outcome](img/v2_vitis_application_outcome.png)
