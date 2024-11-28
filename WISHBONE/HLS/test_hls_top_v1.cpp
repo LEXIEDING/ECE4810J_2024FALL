@@ -13,12 +13,12 @@ int main() {
 
     // 写操作
     hls_top(addr, data, we, cyc, stb, &data_out, &ack_out);
-    printf("Data written: 0x%x\n", data);
 
     // 读操作
     we = false;
     hls_top(addr, 0, we, cyc, stb, &data_out, &ack_out);
-    printf("Data read: 0x%x\n", data_out);
+
+    printf("Read data: 0x%x\n", data_out);
 
     return 0;
 }

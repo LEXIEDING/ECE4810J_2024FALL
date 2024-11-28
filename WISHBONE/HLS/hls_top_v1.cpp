@@ -3,8 +3,6 @@
 #define ADDR_WIDTH 32
 #define DATA_WIDTH 32
 
-const size_t memory_size = 0x10000000 / sizeof(unsigned int);
-
 struct WishboneInterface {
     bool cyc;    // Cycle signal
     bool stb;    // Strobe signal
@@ -46,29 +44,20 @@ public:
 class WishboneSlave {
 public:
     WishboneInterface wb;
-    unsigned int memory[memory_size];  // 简单的内存模型
-    unsigned int baseaddr;     // 基地址
-    unsigned int size;         // 地址空间大小
+    unsigned int memory[256];  // 简单的内存模型
 
     void process() {
-        if (wb.cyc && wb.stb) {  // 只有在 cyc 和 stb 都为高时才处理请求
-            unsigned int offset = wb.addr - baseaddr; // 计算地址偏移
-            if (offset < size) { // 地址在范围内
-                if (wb.we) {
-                    // 写操作
-                    memory[offset / sizeof(unsigned int)] = wb.data;
-                    printf("Writing data 0x%x to address 0x%x\n", wb.data, wb.addr);
-                } else {
-                    // 读操作
-                    wb.data = memory[offset / sizeof(unsigned int)];
-                    printf("Reading data 0x%x from address 0x%x\n", wb.data, wb.addr);
-                }
-                wb.ack = true; // 操作完成，设置 ack 信号
+        if (wb.cyc && wb.stb) {
+            if (wb.we) {
+                // 写操作
+                memory[wb.addr] = wb.data;
             } else {
-                wb.ack = false; // 地址超出范围，设置 ack 信号为 false
+                // 读操作
+                wb.data = memory[wb.addr];
             }
+            wb.ack = true;
         } else {
-            wb.ack = false; // 无效传输，设置 ack 信号为 false
+            wb.ack = false;
         }
     }
 };
@@ -81,8 +70,8 @@ public:
 
     void arbitrate() {
         // 地址解码
-        bool s0_sel = (master->wb.addr >= slave0->baseaddr) && (master->wb.addr < (slave0->baseaddr + slave0->size));
-        bool s1_sel = (master->wb.addr >= slave1->baseaddr) && (master->wb.addr < (slave1->baseaddr + slave1->size));
+        bool s0_sel = (master->wb.addr >> 28) == 0x0;
+        bool s1_sel = (master->wb.addr >> 28) == 0x1;
 
         if (s0_sel) {
             slave0->wb.cyc = master->wb.cyc;
@@ -91,9 +80,9 @@ public:
             slave0->wb.addr = master->wb.addr;
             slave0->wb.data = master->wb.data;
             slave0->process();
-            master->wb.ack = slave0->wb.ack; // 确保主设备的 ack 信号被正确设置
             if (slave0->wb.ack) {
                 master->wb.data = slave0->wb.data;
+                master->wb.ack = slave0->wb.ack;
             }
         } else if (s1_sel) {
             slave1->wb.cyc = master->wb.cyc;
@@ -102,12 +91,10 @@ public:
             slave1->wb.addr = master->wb.addr;
             slave1->wb.data = master->wb.data;
             slave1->process();
-            master->wb.ack = slave1->wb.ack; // 确保主设备的 ack 信号被正确设置
             if (slave1->wb.ack) {
                 master->wb.data = slave1->wb.data;
+                master->wb.ack = slave1->wb.ack;
             }
-        } else {
-            master->wb.ack = false; // 如果地址不属于任何从设备，设置 ack 为 false
         }
     }
 };
@@ -125,11 +112,6 @@ extern "C" void hls_top(unsigned int addr, unsigned int data, bool we, bool cyc,
     WishboneMaster master;
     WishboneSlave slave0, slave1;
     WishboneArbiter arbiter;
-
-    slave0.baseaddr = 0x00000000;
-    slave0.size = 0x10000000; // 256 MB
-    slave1.baseaddr = 0x10000000;
-    slave1.size = 0x10000000; // 256 MB
 
     arbiter.master = &master;
     arbiter.slave0 = &slave0;
