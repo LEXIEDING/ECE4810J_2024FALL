@@ -17,7 +17,7 @@ __port_definition:__
 ![port_general](lab1_related_info/img/port_general.png)
 ![port_specific](lab1_related_info/img/port_specific.png)
 
-__migration_reference：__
+__migration_reference:__
 
 ![migration_reference](lab1_related_info/img/migration_reference.png)
 
