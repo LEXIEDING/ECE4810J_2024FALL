@@ -138,16 +138,59 @@ While our work is not entirely novel, it contributes to the existing body of kno
 
 \section{Methods}
 
+In this project, we implemented the Wishbone bus architecture using High-Level Synthesis (HLS) to facilitate the design and verification process. HLS allows us to describe the hardware behavior using high-level programming languages such as C and C++, which are then synthesized into RTL (Register Transfer Level) code. This approach significantly reduces the development time and complexity compared to traditional RTL design.
+
+We divided our implementation into three main versions, each building upon the previous one to add more features and improve performance:
+
+\begin{itemize}
+    \item \textbf{Version 1 (v1)}: Primitive Read/Write Wishbone Master/Slave Implementation.
+    \item \textbf{Version 2 (v2)}: Added support for \texttt{BASEADDR}, \texttt{SIZE}, and \texttt{OFFSET}.
+    \item \textbf{Version 3 (v3)}: Introduced the \texttt{sel} signal for partial byte operations.
+\end{itemize}
+
+Each version was thoroughly tested using corresponding testbenches to ensure correctness and performance. The HLS tool used for this project was Vitis HLS, which provided an efficient workflow for synthesizing and verifying our designs.
+
 
 
 
 
 \section{Methodology}
 
+The methodology for implementing the Wishbone bus architecture using HLS involved several key steps:
+
+\subsection{System Design and Integration}
+The initial step involved designing the overall system architecture, including the Wishbone bus interface and its integration with other SoC components. This was achieved by defining the Wishbone protocol signals and their interactions within the system.
+
+\subsection{High-Level Synthesis (HLS) Implementation}
+The core functionality of the Wishbone bus was implemented using C++ in the HLS environment. The main components included:
+\begin{itemize}
+    \item \textbf{WishboneMaster}: Handles the generation of bus cycles and data transfer requests.
+    \item \textbf{WishboneSlave}: Responds to the master's requests and performs read/write operations.
+    \item \textbf{WishboneArbiter}: Manages the arbitration between multiple slaves and ensures correct data routing.
+\end{itemize}
+
+\subsection{Testing and Verification}
+Each version of the implementation was tested using corresponding testbenches written in C. These testbenches simulated various scenarios, including normal operations, boundary conditions, and invalid addresses, to verify the correctness and robustness of the design.
+
+\subsection{Performance Analysis and Optimization}
+Performance metrics such as speed, latency, and throughput were measured to evaluate the efficiency of the Wishbone bus implementation. Optimization strategies were proposed and implemented to address any identified bottlenecks, ensuring that the system met the desired performance standards.
+
 
 
 
 \section{Evaluation}
+
+The evaluation of our Wishbone bus implementation involved several key aspects:
+
+\subsection{Functional Verification}
+Functional verification was performed using the testbenches developed for each version of the implementation. The testbenches covered a wide range of scenarios, including:
+\begin{itemize}
+    \item Basic read/write operations.
+    \item Partial byte operations using the `sel` signal.
+    \item Boundary condition testing.
+    \item Cross-slave boundary operations.
+    \item Handling of invalid addresses.
+\end{itemize}
 
 
 
@@ -187,6 +230,22 @@ For the successful completion of the Wishbone Bus Implementation project, our te
 
 \section{Conclusion}
 
+In this project, we successfully implemented the Wishbone bus architecture using High-Level Synthesis (HLS). Our implementation went through three major versions, each adding new features and improving performance. The use of HLS allowed us to efficiently design, verify, and optimize the Wishbone bus interface, significantly reducing development time compared to traditional RTL design methods.
+
+\subsection{Key Achievements}
+\begin{itemize}
+    \item Developed a robust Wishbone bus interface with support for \texttt{BASEADDR}, \texttt{SIZE}, and \texttt{OFFSET}, and \texttt{sel} signals.
+    \item Achieved functional verification through comprehensive testbenches covering various scenarios.
+    \item Conducted performance analysis and optimization to ensure the implementation met the desired standards.
+    \item Analyzed resource utilization to ensure efficient use of hardware resources.
+\end{itemize}
+
+\subsection{Future Work}
+Future work could focus on further optimizing the Wishbone bus implementation for specific applications, exploring additional features such as dynamic reconfiguration, and integrating the Wishbone bus with other advanced on-chip communication protocols.
+
+Overall, our project demonstrates the effectiveness of using HLS for designing complex on-chip interconnect architectures, providing a solid foundation for future developments in this area.
+
+
 
 
 
@@ -194,7 +253,7 @@ For the successful completion of the Wishbone Bus Implementation project, our te
 \newpage
 % \bibliographystyle{plain} % Change this to your required style
 % \bibliography{references} % Your .bib file containing references
-\printbibliography[title={References.}, resetnumbers = true, heading = subbibliography]
+\printbibliography[title={References}, resetnumbers=true, heading=subbibliography]
 \clearpage
 
 \end{document}
