@@ -57,9 +57,9 @@ __v3_vitis_hls_solution_report:__
 
 ![v3_vitis_hls_solution_report](img/v3_vitis_hls_solution_report.png)
 
-__v3_vitis_hls_co-solution_report:__
+__v3_vitis_hls_co-simulation_report:__
 
-![v3_vitis_hls_co-solution_report](img/v3_vitis_hls_co-solution_report.png)
+![v3_vitis_hls_co-simulation_report](img/v3_vitis_hls_co-simulation_report.png)
 
 __v3_block_design:__
 
