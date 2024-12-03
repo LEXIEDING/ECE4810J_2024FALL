@@ -148,6 +148,27 @@ We divided our implementation into three main versions, each building upon the p
     \item \textbf{Version 3 (v3)}: Introduced the \texttt{sel} signal for partial byte operations.
 \end{itemize}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{v3_vitis_hls_co-simulation_report.png}
+    \caption{Vitis HLS Co-simulation Report for v3}
+    \label{fig:v3_vitis_hls_co-simulation_report}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{v3_block_design.png}
+    \caption{Block Design for v3}
+    \label{fig:v3_block_design}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{v3_implemented_design_highlight.png}
+    \caption{Implemented Design Highlight for v3}
+    \label{fig:v3_implemented_design_highlight}
+\end{figure}
+
 Each version was thoroughly tested using corresponding testbenches to ensure correctness and performance. The HLS tool used for this project was Vitis HLS, which provided an efficient workflow for synthesizing and verifying our designs.
 
 
@@ -191,6 +212,39 @@ Functional verification was performed using the testbenches developed for each v
     \item Cross-slave boundary operations.
     \item Handling of invalid addresses.
 \end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{v3_vitis_application_outcome.png}
+    \caption{Vitis HLS Application Outcome for v3}
+    \label{fig:v3_vitis_application_outcome}
+\end{figure}
+
+\subsection{Performance Analysis}
+Performance metrics such as speed, latency, and throughput were measured to evaluate the efficiency of the Wishbone bus implementation. Each version of the implementation was synthesized using Vitis HLS, and the Timing Estimate from the Synthesis Summary was analyzed.
+
+\subsubsection{Timing Estimate}
+For versions v1 and v2, the Target Timing Estimate was 12ns. However, with the introduction of the \texttt{sel} signal in version v3, the Target Timing Estimate increased to 14ns. This increase in timing can be attributed to the additional logic required to handle partial byte operations, which introduces more complexity and potential delays in the data path.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{v3_vitis_hls_solution_report.png}
+    \caption{Vitis HLS Solution Report for v3}
+    \label{fig:v3_vitis_hls_solution_report}
+\end{figure}
+
+\subsubsection{Trade-off Analysis}
+The introduction of the \texttt{sel} signal provides significant benefits in terms of flexibility and functionality, allowing for partial byte operations. However, this comes at the cost of increased timing, as seen in the Timing Estimate for v3. The trade-off between timing and functionality must be carefully considered based on the specific requirements of the application.
+
+\paragraph{When to Use \texttt{sel} Signal}
+The \texttt{sel} signal is particularly useful in scenarios where:
+\begin{itemize}
+    \item \textbf{Partial Byte Operations}: Applications that require frequent partial byte read/write operations can benefit from the \texttt{sel} signal, as it allows for more efficient data manipulation without the need for additional software handling.
+    \item \textbf{Memory-Mapped I/O}: In systems with memory-mapped I/O, the \texttt{sel} signal can be used to access specific bytes within a word, improving the granularity of control and data access.
+    \item \textbf{Performance Optimization}: For applications where the overhead of additional timing is acceptable, the \texttt{sel} signal can provide enhanced functionality and flexibility, leading to overall system performance improvements.
+\end{itemize}
+
+In conclusion, while the introduction of the \texttt{sel} signal in version v3 results in a slight increase in timing, the benefits it provides in terms of flexibility and functionality can outweigh the trade-offs in many applications. The decision to use the \texttt{sel} signal should be based on a careful analysis of the specific requirements and constraints of the target application.
 
 
 
