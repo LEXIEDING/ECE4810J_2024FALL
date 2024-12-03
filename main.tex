@@ -1,0 +1,202 @@
+\documentclass[12pt]{report}
+\usepackage[utf8]{inputenc}
+\title{LABORATORY REPORT }
+\author{University of Michigan - Shanghai Jiao Tong University}
+\date{23 October 2024}
+\renewcommand\thesection{\arabic{section}}
+\usepackage{pdfpages}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{indentfirst} 
+\usepackage{CJK}
+\usepackage{hyperref}  
+\usepackage{float}      
+\usepackage[margin=2.5cm]{geometry} 
+\usepackage{multirow}   
+\usepackage{multicol}   
+\usepackage{ulem}       
+\usepackage{graphicx}   
+\usepackage{subfig}     
+\usepackage{amssymb}    
+\usepackage{amsfonts}   
+\usepackage{mathrsfs}   
+\usepackage{latexsym}   
+\usepackage{verbatim}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage[backref=true,defernumbers=true,citestyle=numeric]{biblatex}
+\addbibresource{references.bib}
+% \usepackage{titlesec}
+% \titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}
+% \titleformat{\subsection}{\normalfont\large\bfseries}{\thesection.\arabic{\thesubsection}}{1em}{}
+
+% \titleformat{\subsection}{\normalfont\Large\bfseries}{\thesubsection}{1em}{}
+
+\hypersetup{
+colorlinks=true,
+linkcolor=black
+}
+
+
+
+
+
+\begin{document}
+{\centering
+\scshape{
+\rule[-3pt]{16.5cm}{0.01mm}\\
+\vspace{0.5cm}
+\large UM-SJTU Joint Institute
+\vspace{0.2cm}
+\\ECE4810J 2024Fall System-on-Chip Design
+\rule[3pt]{16.5cm}{0.01mm}\\
+\vspace{0.2cm}
+{\LARGE{Wishbone Bus Implementation}}\\
+\vspace{0.2cm}
+{\Large{Final Project}}\\
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{cover.png}
+    \label{fig:cover}
+\end{figure}
+
+
+\vspace{0.5cm}
+Prof: DR. Xinfei Guo\\
+}}
+\vspace{0.3cm}
+
+
+\vspace{0.5cm}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{l l l}
+        \textbf{Name} & \textbf{Email} \\
+         Muzi Li & muzili529@sjtu.edu.cn \\
+         Lanqi Ding & dinglanqi20021215@sjtu.edu.cn \\
+         Zhangsiyuan Jin & jzsiyuan@sjtu.edu.cn
+    \end{tabular}
+\end{table}
+
+\newpage
+\noindent
+{\Large{\textbf{Abstract}}}
+\\ \hspace*{\fill} \\
+%This is a one page (or less) summary of the design problem, specifications, problem analysis, project plan, as well as the project outcome and motivation. It should provide key details and conclusions concisely.
+
+
+This document presents 
+\\
+
+\noindent
+\textbf{Key Words: }
+
+
+
+
+\newpage
+
+\doublespacing
+\tableofcontents	% 目录
+\thispagestyle{empty}
+\clearpage
+
+
+    
+\setstretch{1.2}
+\setlength{\parskip}{2mm}
+
+
+
+
+\section{Introduction}
+In the field of digital system design, particularly in the design of System-on-Chips (SoCs), the efficiency and reliability of communication between different hardware components are crucial. The Wishbone bus protocol, as a lightweight, open-source on-chip interconnect architecture, is widely adopted due to its simplicity and flexibility. Our project aims to implement this protocol to enhance the efficiency of data exchange between different Intellectual Property (IP) cores in SoCs, ensure the stability of communication, and meet the demands of modern electronic systems for high performance and scalability. The Wishbone bus, through its master-slave communication model, allows the master device to control data transfer while the slave device responds to requests, a model that excels in ensuring data consistency and reducing bus conflicts. Our solution will involve the detailed design and implementation of the Wishbone bus interface, including the maintenance of signal integrity, support for diverse data transfer methods, performance optimization, and considerations for compatibility and scalability. Our goal is to provide an efficient and reliable implementation of the Wishbone bus that not only meets current technical standards but can also adapt to future technological developments. Through this implementation, we expect to enhance system performance while simplifying the SoC design process, offering an effective solution for digital system design.\cite{Sharma_2012}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{wishbone.png}
+    \label{fig:wishbone}
+    \caption{Wishbone Bus}
+\end{figure}
+
+\section{Related Work}
+Our project on the Wishbone bus architecture is situated within a rich landscape of existing research and development in the field of on-chip interconnection architectures. Prior work has explored various aspects of bus architectures, including their performance implications for System-on-Chip (SoC) designs. Notably, Sharma and Kumar's survey, "Wishbone bus Architecture - A Survey and Comparison," provides a comprehensive overview of the Wishbone bus architecture and its comparison with other on-chip bus architectures such as AMBA, CoreConnect, and Avalon. Their study highlights the Wishbone bus's advantages, such as its flexible arbitration scheme and additional data transfer cycle (Read-Modify-Write cycle),\cite{Sharma_2012} which aligns with our focus on enhancing the efficiency of data transfer within SoCs.
+
+In addition to Sharma and Kumar's work, the OpenCores community has contributed several projects related to Wishbone, including an AXI to Wishbone bridge, which demonstrates the practical application and adaptability of the Wishbone protocol in connecting different bus systems.\cite{opencores_wishbone} These projects showcase the versatility of Wishbone in integrating with other protocols, which is relevant to our work as we aim to leverage Wishbone's compatibility features.
+
+Furthermore, the "Double Wishbone Suspension Design Based on Design for Six Sigma (DFSS)" research, while not directly related to bus architectures, employs a robust design methodology that could be analogously applied to our project for optimizing the performance and reliability of the Wishbone bus implementation . This study's approach to minimizing variations and enhancing robustness provides a methodological perspective that may inform our optimization strategies.
+
+Lastly, the "An Architecture and Compiler for Scalable On-Chip Communication" paper by Liang et al. introduces a scalable communication architecture for heterogeneous resources, which is another dimension of on-chip communication that our project touches upon, especially in terms of supporting high-bandwidth signal processing applications .
+
+While our work is not entirely novel, it contributes to the existing body of knowledge by focusing specifically on the Wishbone bus and its integration within the context of modern SoC design challenges. We build upon these foundational works to address specific performance and optimization objectives that are critical for the advancement of on-chip interconnection technologies.
+
+
+
+\section{Methods}
+
+
+
+
+
+\section{Methodology}
+
+
+
+
+\section{Evaluation}
+
+
+
+
+\section{Statement of Work}
+For the successful completion of the Wishbone Bus Implementation project, our team of three members has divided the work into three parts: System Design and Integration, Hardware Implementation and Debugging, Performance Analysis and Optimization.
+
+\begin{itemize}
+    \item Zhangsiyuan Jin: System Design and Integration
+
+    She conducted a preliminary research on the Wishbone bus architecture through data collection and literature search, focusing on its protocols and interfaces. Then she designed a Wishbone compliant system architecture and integrated the bus with other SoC components. In addition, she developed a testbench and conducted simulations to verify the performance of the bus.
+
+    \item Lanqi Ding: Hardware Implementation and Debugging
+
+    She was responsible for crafting the high level synthesis (HLS) code for the Wishbone bus interface, bringing the design to life. She expertly implemented the arbitration logic and data transfer mechanisms that are essential for the bus's operation, ensuring efficient communication between components. When challenges arose during simulations and testing, Lanqi diligently debugged the design, pinpointing and resolving issues to maintain project momentum. 
+
+    \item Muzi Li: Performance Analysis and Optimization
+
+    She played a critical role in assessing the performance of the Wishbone bus implementation, diligently measuring key metrics like speed, latency, and throughput to ensure the system's efficiency. She identified performance bottlenecks and proposed targeted optimization strategies to boost the bus's capabilities. Working closely with Member A and Member B, they collaboratively implemented these enhancements, leading to significant improvements in the system's overall performance. Additionally, Member C was tasked with compiling the final report, which comprehensively detailed the performance analysis findings and the tangible benefits achieved through the implemented optimizations.
+
+
+    
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Conclusion}
+
+
+
+
+% References
+\newpage
+% \bibliographystyle{plain} % Change this to your required style
+% \bibliography{references} % Your .bib file containing references
+\printbibliography[title={References.}, resetnumbers = true, heading = subbibliography]
+\clearpage
+
+\end{document}
+
+
