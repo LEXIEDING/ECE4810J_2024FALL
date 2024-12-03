@@ -87,5 +87,6 @@ open_run impl_1
 open_bd_design {E:/SJTU/2024Fall/ECE4810J/Final_Project_HLS/WISHBONE/WISHBONE.srcs/sources_1/bd/wishbone_hls/wishbone_hls.bd}
 write_hw_platform -fixed -include_bit -force -file E:/SJTU/2024Fall/ECE4810J/Final_Project_HLS/WISHBONE/wishbone_hls_wrapper.xsa
 ```
-v3_vitis_application_outcome
+__v3_vitis_application_outcome:__
+
 ![v3_vitis_application_outcome](img/v3_vitis_application_outcome.png)
