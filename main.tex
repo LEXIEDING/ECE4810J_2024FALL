@@ -87,14 +87,10 @@ Prof: DR. Xinfei Guo\\
 {\Large{\textbf{Abstract}}}
 \\ \hspace*{\fill} \\
 %This is a one page (or less) summary of the design problem, specifications, problem analysis, project plan, as well as the project outcome and motivation. It should provide key details and conclusions concisely.
-
-
-This document presents 
-\\
+This document presents the implementation of the Wishbone bus architecture using High-Level Synthesis (HLS). The Wishbone bus protocol, known for its simplicity and flexibility, is widely adopted in System-on-Chip (SoC) designs to enhance the efficiency of data exchange between different Intellectual Property (IP) cores. Our project involved three major versions of the Wishbone bus implementation, each adding new features and improving performance. Version 1 (v1) focused on primitive read/write operations, Version 2 (v2) introduced support for \texttt{BASEADDR}, \texttt{SIZE}, and \texttt{OFFSET}, and Version 3 (v3) added the \texttt{sel} signal for partial byte operations. The implementation was thoroughly tested using Vitis HLS, and performance metrics such as speed, latency, and throughput were analyzed. The introduction of the \texttt{sel} signal in v3 resulted in a slight increase in timing from 12ns to 14ns, highlighting the trade-off between functionality and performance. Future work includes exploring the use of a custom signal line, \texttt{TAGN}, for enhanced debugging, QoS management, security, and protocol extensions. Overall, this project demonstrates the effectiveness of using HLS for designing complex on-chip interconnect architectures, providing a solid foundation for future developments in this area.
 
 \noindent
-\textbf{Key Words: }
-
+\textbf{Key Words:} Wishbone bus, High-Level Synthesis, System-on-Chip, Vitis HLS, partial byte operations, \texttt{sel} signal, \texttt{TAGN} signal, performance optimization
 
 
 
@@ -255,18 +251,15 @@ For the successful completion of the Wishbone Bus Implementation project, our te
 \begin{itemize}
     \item Zhangsiyuan Jin: System Design and Integration
 
-    She conducted a preliminary research on the Wishbone bus architecture through data collection and literature search, focusing on its protocols and interfaces. Then she designed a Wishbone compliant system architecture and integrated the bus with other SoC components. In addition, she developed a testbench and conducted simulations to verify the performance of the bus.
+    She conducted a preliminary research on the Wishbone bus architecture through data collection and literature search, focusing on its protocols and interfaces. Then she designed a Wishbone compliant system architecture and integrated the bus with other SoC components. In addition, she developed a testbench and conducted simulations to verify the performance of the bus. Zhangsiyuan Jin chose the FPGA flow with Verilog/SystemVerilog/SystemC and performed board evaluation on the Arty Z7 using Vitis or Pynq.
 
     \item Lanqi Ding: Hardware Implementation and Debugging
 
-    She was responsible for crafting the high level synthesis (HLS) code for the Wishbone bus interface, bringing the design to life. She expertly implemented the arbitration logic and data transfer mechanisms that are essential for the bus's operation, ensuring efficient communication between components. When challenges arose during simulations and testing, Lanqi diligently debugged the design, pinpointing and resolving issues to maintain project momentum. 
+    She was responsible for crafting the high level synthesis (HLS) code for the Wishbone bus interface, bringing the design to life. She expertly implemented the arbitration logic and data transfer mechanisms that are essential for the bus's operation, ensuring efficient communication between components. When challenges arose during simulations and testing, Lanqi diligently debugged the design, pinpointing and resolving issues to maintain project momentum. Lanqi Ding chose the FPGA flow with Vitis HLS and performed board evaluation on the Arty Z7 using Vitis or Pynq.
 
     \item Muzi Li: Performance Analysis and Optimization
 
     She played a critical role in assessing the performance of the Wishbone bus implementation, diligently measuring key metrics like speed, latency, and throughput to ensure the system's efficiency. She identified performance bottlenecks and proposed targeted optimization strategies to boost the bus's capabilities. Working closely with Member A and Member B, they collaboratively implemented these enhancements, leading to significant improvements in the system's overall performance. Additionally, Member C was tasked with compiling the final report, which comprehensively detailed the performance analysis findings and the tangible benefits achieved through the implemented optimizations.
-
-
-    
 \end{itemize}
 
 
