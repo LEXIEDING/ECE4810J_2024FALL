@@ -243,6 +243,17 @@ In this project, we successfully implemented the Wishbone bus architecture using
 \subsection{Future Work}
 Future work could focus on further optimizing the Wishbone bus implementation for specific applications, exploring additional features such as dynamic reconfiguration, and integrating the Wishbone bus with other advanced on-chip communication protocols.
 
+One promising area for future exploration is the introduction of a custom signal line, \texttt{TAGN}. The \texttt{TAGN} signal could be used to carry additional metadata or control information alongside the standard Wishbone signals. Potential applications of the \texttt{TAGN} signal include:
+
+\begin{itemize}
+    \item \textbf{Enhanced Debugging and Monitoring}: The \texttt{TAGN} signal could be used to tag specific transactions for debugging purposes, allowing for more granular monitoring and analysis of bus activity.
+    \item \textbf{Quality of Service (QoS) Management}: By using the \texttt{TAGN} signal to indicate priority levels or other QoS parameters, the Wishbone bus could support differentiated services, ensuring that critical transactions receive the necessary bandwidth and latency guarantees.
+    \item \textbf{Security and Access Control}: The \texttt{TAGN} signal could carry security-related information, such as access control tags, to enforce security policies and prevent unauthorized access to sensitive data.
+    \item \textbf{Protocol Extensions}: The \texttt{TAGN} signal could be used to implement custom protocol extensions, enabling the Wishbone bus to support new features or interoperate with other bus protocols.
+\end{itemize}
+
+Exploring the implementation and integration of the \texttt{TAGN} signal within the Wishbone bus architecture could open up new possibilities for enhancing the functionality and versatility of the bus system. This line of research would involve defining the \texttt{TAGN} signal's specifications, developing the necessary hardware and software support, and evaluating its impact on system performance and complexity.
+
 Overall, our project demonstrates the effectiveness of using HLS for designing complex on-chip interconnect architectures, providing a solid foundation for future developments in this area.
 
 
