@@ -90,6 +90,11 @@ Prof: DR. Xinfei Guo\\
 This document presents the implementation of the Wishbone bus architecture using High-Level Synthesis (HLS). The Wishbone bus protocol, known for its simplicity and flexibility, is widely adopted in System-on-Chip (SoC) designs to enhance the efficiency of data exchange between different Intellectual Property (IP) cores. Our project involved three major versions of the Wishbone bus implementation, each adding new features and improving performance. Version 1 (v1) focused on primitive read/write operations, Version 2 (v2) introduced support for \texttt{BASEADDR}, \texttt{SIZE}, and \texttt{OFFSET}, and Version 3 (v3) added the \texttt{sel} signal for partial byte operations. The implementation was thoroughly tested using Vitis HLS, and performance metrics such as speed, latency, and throughput were analyzed. The introduction of the \texttt{sel} signal in v3 resulted in a slight increase in timing from 12ns to 14ns, highlighting the trade-off between functionality and performance. Future work includes exploring the use of a custom signal line, \texttt{TAGN}, for enhanced debugging, QoS management, security, and protocol extensions. Overall, this project demonstrates the effectiveness of using HLS for designing complex on-chip interconnect architectures, providing a solid foundation for future developments in this area.
 
 \noindent
+\\
+The complete source code for this project is available at \url{https://github.com/LEXIEDING/ECE4810J_2024FALL/tree/feat/wishbone}. This repository includes the assignment specification, design ideas, detailed information about the WISHBONE interface and read/write operation logic, RTL and HLS design code, version information (including Vitis Reports, Vivado diagrams, and Vitis Application results), as well as a simple installation guide.
+
+\noindent
+\\
 \textbf{Key Words:} Wishbone bus, High-Level Synthesis, System-on-Chip, Vitis HLS, partial byte operations, \texttt{sel} signal, \texttt{TAGN} signal, performance optimization
 
 
