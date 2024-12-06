@@ -1,145 +1,177 @@
-\documentclass[12pt]{report}
-\usepackage[utf8]{inputenc}
-\title{LABORATORY REPORT }
-\author{University of Michigan - Shanghai Jiao Tong University}
-\date{23 October 2024}
-\renewcommand\thesection{\arabic{section}}
-\usepackage{pdfpages}
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+%\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
 \usepackage{graphicx}
-\usepackage{amsmath}
-\usepackage{indentfirst} 
-\usepackage{CJK}
-\usepackage{hyperref}  
-\usepackage{float}      
-\usepackage[margin=2.5cm]{geometry} 
-\usepackage{multirow}   
-\usepackage{multicol}   
-\usepackage{ulem}       
-\usepackage{graphicx}   
-\usepackage{subfig}     
-\usepackage{amssymb}    
-\usepackage{amsfonts}   
-\usepackage{mathrsfs}   
-\usepackage{latexsym}   
-\usepackage{verbatim}
-\usepackage{setspace}
-\usepackage{hyperref}
-\usepackage{enumitem}
+\usepackage{textcomp}
+\usepackage{xcolor}
 \usepackage[backref=true,defernumbers=true,citestyle=numeric]{biblatex}
+\usepackage{fancyhdr}
+% \usepackage{listings}
+% \usepackage{hyperref}
+
+% \definecolor{vgreen}{RGB}{104,180,104}
+%     \definecolor{vblue}{RGB}{49,49,255}
+%     \definecolor{vorange}{RGB}{255,143,102}
+%     \lstdefinestyle{verilog-style}
+%     {
+%         language=Verilog,
+%         basicstyle=\small,
+%         keywordstyle=\color{vblue},
+%         identifierstyle=\color{black},
+%         commentstyle=\color{vgreen},
+%         numbers=left,
+%         numberstyle={\tiny \color{black}},
+%         numbersep=10pt,
+%         tabsize=8
+%     }
+
+
+% 设置页脚样式
+\pagestyle{fancy}
+% 清空页眉和页脚的默认设置
+\fancyhf{}
+% 在页脚中间插入页码
+\fancyfoot[C]{\thepage}
+
+% 去掉页眉和页脚的横线
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
 \addbibresource{references.bib}
-% \usepackage{titlesec}
-% \titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}
-% \titleformat{\subsection}{\normalfont\large\bfseries}{\thesection.\arabic{\thesubsection}}{1em}{}
+% \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+%     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
 
-% \titleformat{\subsection}{\normalfont\Large\bfseries}{\thesubsection}{1em}{}
-
-\hypersetup{
-colorlinks=true,
-linkcolor=black
+\title{Wishbone Bus Implementation\\
+{\footnotesize \textsuperscript{}ECE4810J 2024Fall System-on-Chip Design Final Project}
 }
 
+\author{
+\IEEEauthorblockN{Lanqi Ding}
+\IEEEauthorblockA{\textit{ShanghaiJiaoTong University} \\
+\textit{UM-Joint Institute}\\
+dinglanqi20021215@sjtu.edu.cn}
+\and
+\IEEEauthorblockN{Zhangsiyuan Jin}
+\IEEEauthorblockA{\textit{ShanghaiJiaoTong University} \\
+\textit{UM-Joint Institute}\\
+jzsiyuan@sjtu.edu.cn}
+\and
+\IEEEauthorblockN{Muzi Li}
+\IEEEauthorblockA{\textit{ShanghaiJiaoTong University} \\
+\textit{UM-Joint Institute}\\
+muzili529@sjtu.edu.cn}
 
+}
 
+\maketitle
 
+\begin{abstract}
+This document 
+\end{abstract}
 
-\begin{document}
-{\centering
-\scshape{
-\rule[-3pt]{16.5cm}{0.01mm}\\
-\vspace{0.5cm}
-\large UM-SJTU Joint Institute
-\vspace{0.2cm}
-\\ECE4810J 2024Fall System-on-Chip Design
-\rule[3pt]{16.5cm}{0.01mm}\\
-\vspace{0.2cm}
-{\LARGE{Wishbone Bus Implementation}}\\
-\vspace{0.2cm}
-{\Large{Final Project}}\\
-
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.6\textwidth]{cover.png}
-    \label{fig:cover}
-\end{figure}
-
-
-\vspace{0.5cm}
-Prof: DR. Xinfei Guo\\
-}}
-\vspace{0.3cm}
-
-
-\vspace{0.5cm}
-
-\begin{table}[h]
-    \centering
-    \begin{tabular}{l l l}
-        \textbf{Name} & \textbf{Email} \\
-         Muzi Li & muzili529@sjtu.edu.cn \\
-         Lanqi Ding & dinglanqi20021215@sjtu.edu.cn \\
-         Zhangsiyuan Jin & jzsiyuan@sjtu.edu.cn
-    \end{tabular}
-\end{table}
-
-\newpage
-\noindent
-{\Large{\textbf{Abstract}}}
-\\ \hspace*{\fill} \\
-%This is a one page (or less) summary of the design problem, specifications, problem analysis, project plan, as well as the project outcome and motivation. It should provide key details and conclusions concisely.
-This document presents the implementation of the Wishbone bus architecture using High-Level Synthesis (HLS). The Wishbone bus protocol, known for its simplicity and flexibility, is widely adopted in System-on-Chip (SoC) designs to enhance the efficiency of data exchange between different Intellectual Property (IP) cores. Our project involved three major versions of the Wishbone bus implementation, each adding new features and improving performance. Version 1 (v1) focused on primitive read/write operations, Version 2 (v2) introduced support for \texttt{BASEADDR}, \texttt{SIZE}, and \texttt{OFFSET}, and Version 3 (v3) added the \texttt{sel} signal for partial byte operations. The implementation was thoroughly tested using Vitis HLS, and performance metrics such as speed, latency, and throughput were analyzed. The introduction of the \texttt{sel} signal in v3 resulted in a slight increase in timing from 12ns to 14ns, highlighting the trade-off between functionality and performance. Future work includes exploring the use of a custom signal line, \texttt{TAGN}, for enhanced debugging, QoS management, security, and protocol extensions. Overall, this project demonstrates the effectiveness of using HLS for designing complex on-chip interconnect architectures, providing a solid foundation for future developments in this area.
-
-\noindent
-\\
-The complete source code for this project is available at \url{https://github.com/LEXIEDING/ECE4810J_2024FALL/tree/feat/wishbone}. This repository includes the assignment specification, design ideas, detailed information about the WISHBONE interface and read/write operation logic, RTL and HLS design code, version information (including Vitis Reports, Vivado diagrams, and Vitis Application results), as well as a simple installation guide.
-
-\noindent
-\\
-\textbf{Key Words:} Wishbone bus, High-Level Synthesis, System-on-Chip, Vitis HLS, partial byte operations, \texttt{sel} signal, \texttt{TAGN} signal, performance optimization
-
-
-
-\newpage
-
-\doublespacing
-\tableofcontents	% 目录
-\thispagestyle{empty}
-\clearpage
-
-
-    
-\setstretch{1.2}
-\setlength{\parskip}{2mm}
-
-
-
+\begin{IEEEkeywords}
+Wishbone, 
+\end{IEEEkeywords}
 
 \section{Introduction}
 In the field of digital system design, particularly in the design of System-on-Chips (SoCs), the efficiency and reliability of communication between different hardware components are crucial. The Wishbone bus protocol, as a lightweight, open-source on-chip interconnect architecture, is widely adopted due to its simplicity and flexibility. Our project aims to implement this protocol to enhance the efficiency of data exchange between different Intellectual Property (IP) cores in SoCs, ensure the stability of communication, and meet the demands of modern electronic systems for high performance and scalability. The Wishbone bus, through its master-slave communication model, allows the master device to control data transfer while the slave device responds to requests, a model that excels in ensuring data consistency and reducing bus conflicts. Our solution will involve the detailed design and implementation of the Wishbone bus interface, including the maintenance of signal integrity, support for diverse data transfer methods, performance optimization, and considerations for compatibility and scalability. Our goal is to provide an efficient and reliable implementation of the Wishbone bus that not only meets current technical standards but can also adapt to future technological developments. Through this implementation, we expect to enhance system performance while simplifying the SoC design process, offering an effective solution for digital system design.\cite{Sharma_2012}
 
-\begin{figure}[H]
+
+
+\begin{figure}[h]
     \centering
-    \includegraphics[width=0.5\textwidth]{wishbone.png}
-    \label{fig:wishbone}
+    \includegraphics[width=0.3\textwidth]{wishbone.png}
     \caption{Wishbone Bus}
+    \label{wishbone}
 \end{figure}
 
+
+
+
 \section{Related Work}
-Our project on the Wishbone bus architecture is situated within a rich landscape of existing research and development in the field of on-chip interconnection architectures. Prior work has explored various aspects of bus architectures, including their performance implications for System-on-Chip (SoC) designs. Notably, Sharma and Kumar's survey, "Wishbone bus Architecture - A Survey and Comparison," provides a comprehensive overview of the Wishbone bus architecture and its comparison with other on-chip bus architectures such as AMBA, CoreConnect, and Avalon. Their study highlights the Wishbone bus's advantages, such as its flexible arbitration scheme and additional data transfer cycle (Read-Modify-Write cycle),\cite{Sharma_2012} which aligns with our focus on enhancing the efficiency of data transfer within SoCs.
+Our project on the Wishbone bus architecture is situated within a rich landscape of existing research and development in the field of on-chip interconnection architectures. Prior work has explored various aspects of bus architectures, including their performance implications for System-on-Chip (SoC) designs. Notably, Sharma and Kumar's survey, "Wishbone bus Architecture - A Survey and Comparison," provides a comprehensive overview of the Wishbone bus architecture and its comparison with other on-chip bus architectures such as AMBA, CoreConnect, and Avalon. Their study highlights the Wishbone bus's advantages, such as its flexible arbitration scheme and additional data transfer cycle (Read-Modify-Write cycle)\cite{Sharma_2012}, which aligns with our focus on enhancing the efficiency of data transfer within SoCs.
 
-In addition to Sharma and Kumar's work, the OpenCores community has contributed several projects related to Wishbone, including an AXI to Wishbone bridge, which demonstrates the practical application and adaptability of the Wishbone protocol in connecting different bus systems.\cite{opencores_wishbone} These projects showcase the versatility of Wishbone in integrating with other protocols, which is relevant to our work as we aim to leverage Wishbone's compatibility features.
+In addition to Sharma and Kumar's work, the OpenCores community has contributed several projects related to Wishbone, including an AXI to Wishbone bridge, which demonstrates the practical application and adaptability of the Wishbone protocol in connecting different bus systems\cite{opencores_wishbone}. These projects showcase the versatility of Wishbone in integrating with other protocols, which is relevant to our work as we aim to leverage Wishbone's compatibility features.
 
-Furthermore, the "Double Wishbone Suspension Design Based on Design for Six Sigma (DFSS)" research, while not directly related to bus architectures, employs a robust design methodology that could be analogously applied to our project for optimizing the performance and reliability of the Wishbone bus implementation . This study's approach to minimizing variations and enhancing robustness provides a methodological perspective that may inform our optimization strategies.
+Furthermore, the "Double Wishbone Suspension Design Based on Design for Six Sigma (DFSS)" research, while not directly related to bus architectures, employs a robust design methodology that could be analogously applied to our project for optimizing the performance and reliability of the Wishbone bus implementation\cite{10.1145/3421766.3421866}. This study's approach to minimizing variations and enhancing robustness provides a methodological perspective that may inform our optimization strategies.
 
-Lastly, the "An Architecture and Compiler for Scalable On-Chip Communication" paper by Liang et al. introduces a scalable communication architecture for heterogeneous resources, which is another dimension of on-chip communication that our project touches upon, especially in terms of supporting high-bandwidth signal processing applications .
 
 While our work is not entirely novel, it contributes to the existing body of knowledge by focusing specifically on the Wishbone bus and its integration within the context of modern SoC design challenges. We build upon these foundational works to address specific performance and optimization objectives that are critical for the advancement of on-chip interconnection technologies.
 
 
 
 \section{Methods}
+In this project, we worked to develop a complete Wishbone bus system by integrating advanced synthesis (HLS) and register transfer level (RTL) design methods. This integration strategy was strategically chosen to take advantage of the efficiency of HLS and the fine control provided by RTL. Our design process follows the guidelines in the Lab1 manual\cite{ECE4810J_FA2024_Lab1} to build a Wishbone IP block.
 
-In this project, we implemented the Wishbone bus architecture using High-Level Synthesis (HLS) to facilitate the design and verification process. HLS allows us to describe the hardware behavior using high-level programming languages such as C and C++, which are then synthesized into RTL (Register Transfer Level) code. This approach significantly reduces the development time and complexity compared to traditional RTL design.
+\subsection{Overall Design Approach}
+
+In this project, we implemented the Wishbone bus architecture using High-Level Synthesis (HLS) to facilitate the design and verification process. HLS allows us to describe the hardware behavior using high-level programming languages such as C and C++, which are then synthesized into Register Transfer Level (RTL) code. This approach significantly reduces the development time and complexity compared to traditional RTL design. The initial phase of our design utilized HLS rapid prototyping and iterating on high-level abstractions of the Wishbone bus architecture. This allows us to efficiently explore multiple design options and build behavior-level models. After that, we moved into the RTL design phase, working out the hardware details. This included implementing precise control logic and timing constraints that are critical to the proper operation of the Wishbone bus. Our approach ensures a harmonious blend of design efficiency and hardware precision, closely following the Lab1 workflow, which provides the basic framework for our development process. By starting with high-level abstractions and then refining them into detailed RTL, we were able to achieve a more efficient and accurate design process.
+
+
+\subsection{Interface Design}
+The Wishbone bus is a flexible and efficient on-chip interconnect (SoC) protocol, achieving communication between master and slave devices through a series of meticulously designed interfaces as shown in Figure \ref{interface}. Here is a detailed description of the main interfaces of the Wishbone bus and their purposes:
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth]{cover.png}
+    \caption{Interface Details of Wishbone}
+    \label{interface}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{CLK\_I} (Clock Signal): Provides a synchronous clock signal for all devices on the Wishbone bus, ensuring the synchronization of data transmission.
+    
+    \item \textbf{RST\_I} (Reset Signal): Used to asynchronously reset all devices on the Wishbone bus, typically triggered by an external control signal.
+    
+    \item \textbf{ADR\_O/ADR\_I} (Address Lines): Used to transmit address information from the master to the slave device, with ADR\_O indicating the address signal output by the master and ADR\_I representing the address signal input to the slave.
+    
+    \item \textbf{DAT\_O/DAT\_I} (Data Lines): For transmitting data between the master and slave devices, where DAT\_O signifies the data output by the master, and DAT\_I represents the data input from the slave.
+    
+    \item \textbf{WE\_O/WE\_I} (Write Enable Signals): Control the direction of data transfer, with WE\_O output by the master to indicate a write operation (1 for write, 0 for read), and WE\_I is an input to the slave, indicating whether the slave accepts the write operation.
+    
+    \item \textbf{SEL\_O/SEL\_I} (Data Line Select Signals): Used for byte selection, selecting which part of the data lines is active on a byte-by-byte basis. SEL\_O is output by the master, and SEL\_I is an input to the slave.
+    
+    \item \textbf{STB\_O/STB\_I} (Strobe Signals): Indicate the beginning of a bus operation. STB\_O is output by the master, and STB\_I is an input to the slave.
+    
+    \item \textbf{CYC\_O/CYC\_I} (Cycle Signals): Indicate the start and end of a bus cycle. CYC\_O is output by the master, signaling the start of a bus cycle, and CYC\_I is an input to the slave, signaling the end of the cycle.
+    
+    \item \textbf{ACK\_O/ACK\_I} (Acknowledge Signals): Used to indicate the successful completion of a bus operation. ACK\_O is output by the slave, and ACK\_I is an input to the master.
+    
+    \item \textbf{TAGN\_O/TAGN\_I} (Tag Signals): For conveying user-defined information, which can be utilized to implement more complex communication protocols.
+\end{itemize}
+
+Additionally, the Wishbone bus supports various connection methods, including point-to-point, data flow, shared bus, and crossbar connections, to accommodate different system architecture needs. For instance, point-to-point connections are suitable for single master-slave communications, while shared bus and crossbar connections allow multiple masters to communicate with one or multiple slaves.
+
+\subsection{Data Transmission}
+\subsubsection{Read Operation}
+The read operation is initiated by the master device. It sets the address signal ADR\_O (address output), the data select signal SEL\_O (byte select), and the strobe signal STB\_O to commence a read operation, while grounding the write enable signal WE\_O to explicitly indicate that this is a read operation. At the rising edge of the clock cycle 0, the master asserts the strobe signal STB\_O and the cycle signal CYC\_O to initiate a transaction, marking the beginning of the operation.
+
+Before the subsequent clock cycle's rising edge arrives, the slave device detects the master's initiation signal and responds by driving the requested data onto the data line DAT\_O and asserting the acknowledge signal ACK\_O in response to the master's request. At the rising edge of the clock cycle 1, once the master detects the ACK\_O signal to be high, it samples the data on the data line DAT\_I, and then concludes the operation by de-asserting CYC\_O and STB\_O, signifying the end of a complete read cycle.
+
+This process ensures that the master device can read data from the slave device. After the slave confirms that the data is ready, it informs the master that it can proceed with data sampling via the ACK\_O signal. Once the master device has received and sampled the data, it halts the current transaction, preparing for the next operation or waiting for new instructions. This coordinated communication mechanism is at the core of the Wishbone bus protocol, allowing for efficient data exchange between different components in complex SoC designs.
+
+\subsubsection{Write Operation}
+The write operation is meticulously orchestrated by the master device. At the rising edge of the clock cycle 0, the master initiates the transaction by setting the address signal ADR\_O (address output), data signal DAT\_O (data output), data select signal SEL\_O (byte select), strobe signal STB\_O, and the write enable signal WE\_O, which is asserted to indicate a write operation. This configuration signals the commencement of the transaction.
+
+Upon recognizing the master's command, the slave device promptly latches the data from DAT\_I with the provided data and prepares to acknowledge the transaction. Prior to the subsequent rising edge of the clock, the slave device, having recognized the master's command, locks in the data onto the DAT\_O line and asserts the acknowledge signal ACK\_O to confirm receipt of the data and the successful initiation of the write operation.
+
+At the rising edge of the clock cycle 1, the master, upon detecting the assertion of ACK\_O, proceeds to sample the acknowledgment signal ACK\_I. With the confirmation of the successful write operation, the master then deactivates the cycle signal CYC\_O and the strobe signal STB\_O, effectively finalizing the write operation. This coordinated exchange ensures that the data is accurately transmitted from the master to the slave, and the slave's acknowledgment signifies the completion of the data transfer.
+
+This methodical and precise sequence of signals and responses guarantees the integrity and reliability of data transmission within the Wishbone bus system. The write operation is a fundamental aspect of the communication protocol, enabling the master device to update or store data in the slave device's memory or registers.
+
+
+\subsection{High-Level Synthesis (HLS) Implementation}
+The core functionality of the Wishbone bus was implemented using C++ in the HLS environment. The main components included:
+\begin{itemize}
+    \item \textbf{WishboneMaster}: Handles the generation of bus cycles and data transfer requests.
+    \item \textbf{WishboneSlave}: Responds to the master's requests and performs read/write operations.
+    \item \textbf{WishboneArbiter}: Manages the arbitration between multiple slaves and ensures correct data routing.
+\end{itemize}
+
 
 We divided our implementation into three main versions, each building upon the previous one to add more features and improve performance:
 
@@ -149,30 +181,42 @@ We divided our implementation into three main versions, each building upon the p
     \item \textbf{Version 3 (v3)}: Introduced the \texttt{sel} signal for partial byte operations.
 \end{itemize}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{v3_vitis_hls_co-simulation_report.png}
-    \caption{Vitis HLS Co-simulation Report for v3}
-    \label{fig:v3_vitis_hls_co-simulation_report}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{v3_block_design.png}
-    \caption{Block Design for v3}
-    \label{fig:v3_block_design}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{v3_implemented_design_highlight.png}
-    \caption{Implemented Design Highlight for v3}
-    \label{fig:v3_implemented_design_highlight}
-\end{figure}
 
 Each version was thoroughly tested using corresponding testbenches to ensure correctness and performance. The HLS tool used for this project was Vitis HLS, which provided an efficient workflow for synthesizing and verifying our designs.
 
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.4\textwidth]{v3_vitis_hls_co-simulation_report.png}
+    \caption{Vitis HLS Co-simulation Report for v3}
+    \label{fig:v3_vitis_hls_co-simulation_report}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.4\textwidth]{v3_block_design.png}
+    \caption{Block Design for v3}
+    \label{fig:v3_block_design}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.4\textwidth]{v3_implemented_design_highlight.png}
+    \caption{Implemented Design Highlight for v3}
+    \label{fig:v3_implemented_design_highlight}
+\end{figure}
+
+\subsection{RTL Implementation}
+In the RTL implementation section of our paper, we provide an overview of the hardware description language implementation of the Wishbone interface, designed to facilitate efficient communication between master and slave devices within a System-on-Chip (SoC) environment. The RTL module, `wishbone\_interface`, implements the Wishbone protocol through a series of ports that include clock, reset, cycle, strobe, write enable, address, data input, and output signals, as well as acknowledge and error signals.
+
+The write operation is initiated by the master device at the rising edge of the clock by setting the address, data, and control signals. Upon detecting the command, the slave device responds by latching the data and asserting an acknowledge. The read operation follows a similar pattern, where the master device sets the address and control signals, and the slave provides the data and an acknowledgment. The error signal is utilized to indicate any anomalies occurring during the data transfer process. The corresponding code is shown in Figure \ref{read_write_code}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.4\textwidth]{read_write_code.png}
+    \caption{RTL Code of Read and Write}
+    \label{read_write_code}
+\end{figure}
 
 
 
@@ -180,16 +224,6 @@ Each version was thoroughly tested using corresponding testbenches to ensure cor
 
 The methodology for implementing the Wishbone bus architecture using HLS involved several key steps:
 
-\subsection{System Design and Integration}
-The initial step involved designing the overall system architecture, including the Wishbone bus interface and its integration with other SoC components. This was achieved by defining the Wishbone protocol signals and their interactions within the system.
-
-\subsection{High-Level Synthesis (HLS) Implementation}
-The core functionality of the Wishbone bus was implemented using C++ in the HLS environment. The main components included:
-\begin{itemize}
-    \item \textbf{WishboneMaster}: Handles the generation of bus cycles and data transfer requests.
-    \item \textbf{WishboneSlave}: Responds to the master's requests and performs read/write operations.
-    \item \textbf{WishboneArbiter}: Manages the arbitration between multiple slaves and ensures correct data routing.
-\end{itemize}
 
 \subsection{Testing and Verification}
 Each version of the implementation was tested using corresponding testbenches written in C. These testbenches simulated various scenarios, including normal operations, boundary conditions, and invalid addresses, to verify the correctness and robustness of the design.
@@ -214,9 +248,9 @@ Functional verification was performed using the testbenches developed for each v
     \item Handling of invalid addresses.
 \end{itemize}
 
-\begin{figure}[H]
+\begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\textwidth]{v3_vitis_application_outcome.png}
+    \includegraphics[width=0.4\textwidth]{v3_vitis_application_outcome.png}
     \caption{Vitis HLS Application Outcome for v3}
     \label{fig:v3_vitis_application_outcome}
 \end{figure}
@@ -227,9 +261,9 @@ Performance metrics such as speed, latency, and throughput were measured to eval
 \subsubsection{Timing Estimate}
 For versions v1 and v2, the Target Timing Estimate was 12ns. However, with the introduction of the \texttt{sel} signal in version v3, the Target Timing Estimate increased to 14ns. This increase in timing can be attributed to the additional logic required to handle partial byte operations, which introduces more complexity and potential delays in the data path.
 
-\begin{figure}[H]
+\begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\textwidth]{v3_vitis_hls_solution_report.png}
+    \includegraphics[width=0.4\textwidth]{v3_vitis_hls_solution_report.png}
     \caption{Vitis HLS Solution Report for v3}
     \label{fig:v3_vitis_hls_solution_report}
 \end{figure}
@@ -250,75 +284,38 @@ In conclusion, while the introduction of the \texttt{sel} signal in version v3 r
 
 
 
+
+
 \section{Statement of Work}
 For the successful completion of the Wishbone Bus Implementation project, our team of three members has divided the work into three parts: System Design and Integration, Hardware Implementation and Debugging, Performance Analysis and Optimization.
 
 \begin{itemize}
     \item Zhangsiyuan Jin: System Design and Integration
 
-    She conducted a preliminary research on the Wishbone bus architecture through data collection and literature search, focusing on its protocols and interfaces. Then she designed a Wishbone compliant system architecture and integrated the bus with other SoC components. In addition, she developed a testbench and conducted simulations to verify the performance of the bus. Zhangsiyuan Jin chose the FPGA flow with Verilog/SystemVerilog/SystemC and performed board evaluation on the Arty Z7 using Vitis or Pynq.
+    She conducted a preliminary research on the Wishbone bus architecture through data collection and literature search, focusing on its protocols and interfaces. Then she designed a Wishbone compliant system architecture and integrated the bus with other SoC components. In addition, she developed a testbench and conducted simulations to verify the performance of the bus.
 
     \item Lanqi Ding: Hardware Implementation and Debugging
 
-    She was responsible for crafting the high level synthesis (HLS) code for the Wishbone bus interface, bringing the design to life. She expertly implemented the arbitration logic and data transfer mechanisms that are essential for the bus's operation, ensuring efficient communication between components. When challenges arose during simulations and testing, Lanqi diligently debugged the design, pinpointing and resolving issues to maintain project momentum. Lanqi Ding chose the FPGA flow with Vitis HLS and performed board evaluation on the Arty Z7 using Vitis or Pynq.
+    She was responsible for crafting the hardware description language (HDL) code for the Wishbone bus interface, bringing the design to life. She expertly implemented the arbitration logic and data transfer mechanisms that are essential for the bus's operation, ensuring efficient communication between components. When challenges arose during simulations and testing, Lanqi diligently debugged the design, pinpointing and resolving issues to maintain project momentum. 
 
     \item Muzi Li: Performance Analysis and Optimization
 
     She played a critical role in assessing the performance of the Wishbone bus implementation, diligently measuring key metrics like speed, latency, and throughput to ensure the system's efficiency. She identified performance bottlenecks and proposed targeted optimization strategies to boost the bus's capabilities. Working closely with Member A and Member B, they collaboratively implemented these enhancements, leading to significant improvements in the system's overall performance. Additionally, Member C was tasked with compiling the final report, which comprehensively detailed the performance analysis findings and the tangible benefits achieved through the implemented optimizations.
+
 \end{itemize}
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 \section{Conclusion}
 
-In this project, we successfully implemented the Wishbone bus architecture using High-Level Synthesis (HLS). Our implementation went through three major versions, each adding new features and improving performance. The use of HLS allowed us to efficiently design, verify, and optimize the Wishbone bus interface, significantly reducing development time compared to traditional RTL design methods.
-
-\subsection{Key Achievements}
-\begin{itemize}
-    \item Developed a robust Wishbone bus interface with support for \texttt{BASEADDR}, \texttt{SIZE}, and \texttt{OFFSET}, and \texttt{sel} signals.
-    \item Achieved functional verification through comprehensive testbenches covering various scenarios.
-    \item Conducted performance analysis and optimization to ensure the implementation met the desired standards.
-    \item Analyzed resource utilization to ensure efficient use of hardware resources.
-\end{itemize}
-
-\subsection{Future Work}
-Future work could focus on further optimizing the Wishbone bus implementation for specific applications, exploring additional features such as dynamic reconfiguration, and integrating the Wishbone bus with other advanced on-chip communication protocols.
-
-One promising area for future exploration is the introduction of a custom signal line, \texttt{TAGN}. The \texttt{TAGN} signal could be used to carry additional metadata or control information alongside the standard Wishbone signals. Potential applications of the \texttt{TAGN} signal include:
-
-\begin{itemize}
-    \item \textbf{Enhanced Debugging and Monitoring}: The \texttt{TAGN} signal could be used to tag specific transactions for debugging purposes, allowing for more granular monitoring and analysis of bus activity.
-    \item \textbf{Quality of Service (QoS) Management}: By using the \texttt{TAGN} signal to indicate priority levels or other QoS parameters, the Wishbone bus could support differentiated services, ensuring that critical transactions receive the necessary bandwidth and latency guarantees.
-    \item \textbf{Security and Access Control}: The \texttt{TAGN} signal could carry security-related information, such as access control tags, to enforce security policies and prevent unauthorized access to sensitive data.
-    \item \textbf{Protocol Extensions}: The \texttt{TAGN} signal could be used to implement custom protocol extensions, enabling the Wishbone bus to support new features or interoperate with other bus protocols.
-\end{itemize}
-
-Exploring the implementation and integration of the \texttt{TAGN} signal within the Wishbone bus architecture could open up new possibilities for enhancing the functionality and versatility of the bus system. This line of research would involve defining the \texttt{TAGN} signal's specifications, developing the necessary hardware and software support, and evaluating its impact on system performance and complexity.
-
-Overall, our project demonstrates the effectiveness of using HLS for designing complex on-chip interconnect architectures, providing a solid foundation for future developments in this area.
 
 
 
 
 
-% References
-\newpage
-% \bibliographystyle{plain} % Change this to your required style
-% \bibliography{references} % Your .bib file containing references
-\printbibliography[title={References}, resetnumbers=true, heading=subbibliography]
+
+
+
+
+\printbibliography[title={References},resetnumbers=true,heading=subbibliography]
 \clearpage
-
 \end{document}
-
-
