@@ -274,17 +274,10 @@ By tailoring the tests to match the specific implementation details, this method
 
 \section{Evaluation}
 
-The evaluation of our Wishbone bus implementation involved several key aspects:
+The evaluation of our Wishbone bus implementation involved several key aspects, including functional verification, performance analysis, and a detailed examination of the timing and resource utilization.
 
 \subsection{Functional Verification}
-Functional verification was performed using the testbenches developed for each version of the implementation. The testbenches covered a wide range of scenarios, including:
-\begin{itemize}
-    \item Basic read/write operations.
-    \item Partial byte operations using the \texttt{sel} signal.
-    \item Boundary condition testing.
-    \item Cross-slave boundary operations.
-    \item Handling of invalid addresses.
-\end{itemize}
+Functional verification was performed using the testbenches developed for each version of the implementation. The testbenches covered a wide range of scenarios, including basic read/write operations, partial byte operations using the \texttt{sel} signal, boundary condition testing, cross-slave boundary operations, and handling of invalid addresses. The test results, as shown in the Vitis Serial Terminal output, demonstrate successful operations across various memory addresses and \texttt{sel} signal configurations.
 
 \begin{figure}[h]
     \centering
@@ -297,7 +290,7 @@ Functional verification was performed using the testbenches developed for each v
 Performance metrics such as speed, latency, and throughput were measured to evaluate the efficiency of the Wishbone bus implementation. Each version of the implementation was synthesized using Vitis HLS, and the Timing Estimate from the Synthesis Summary was analyzed.
 
 \subsubsection{Timing Estimate}
-For versions v1 and v2, the Target Timing Estimate was 12ns. However, with the introduction of the \texttt{sel} signal in version v3, the Target Timing Estimate increased to 14ns. This increase in timing can be attributed to the additional logic required to handle partial byte operations, which introduces more complexity and potential delays in the data path.
+The Co-simulation Report for version v3 shows a Target Timing Estimate of 14ns, with an estimated uncertainty of 9.297ns to 3.78ns. This indicates a robust performance with a high degree of confidence in the timing estimates. The Synthesis Summary Report further details the performance with an Average Latency of 79ns, a Minimum Latency of 4ns, and a Maximum Latency of 87ns for the top module.
 
 \begin{figure}[htbp]
     \centering
@@ -313,8 +306,11 @@ For versions v1 and v2, the Target Timing Estimate was 12ns. However, with the i
     \label{fig:v3_vitis_hls_solution_report}
 \end{figure}
 
+\subsubsection{Resource Utilization}
+The resource utilization was also analyzed, with the Synthesis Summary Report indicating the use of 375 LUTs and 694 flip-flops for the top module. The process module utilized 94 LUTs and 214 flip-flops. These resource estimates are crucial for understanding the implementation's efficiency and its potential impact on the overall system design.
+
 \subsubsection{Trade-off Analysis}
-The introduction of the \texttt{sel} signal provides significant benefits in terms of flexibility and functionality, allowing for partial byte operations. However, this comes at the cost of increased timing, as seen in the Timing Estimate for v3. The trade-off between timing and functionality must be carefully considered based on the specific requirements of the application.
+The introduction of the \texttt{sel} signal in version v3, while providing significant benefits in terms of flexibility and functionality, resulted in a slight increase in timing from 12ns to 14ns. This increase can be attributed to the additional logic required to handle partial byte operations, which introduces more complexity and potential delays in the data path.
 
 \paragraph{When to Use \texttt{sel} Signal}
 The \texttt{sel} signal is particularly useful in scenarios where:
@@ -324,8 +320,7 @@ The \texttt{sel} signal is particularly useful in scenarios where:
     \item \textbf{Performance Optimization}: For applications where the overhead of additional timing is acceptable, the \texttt{sel} signal can provide enhanced functionality and flexibility, leading to overall system performance improvements.
 \end{itemize}
 
-In conclusion, while the introduction of the \texttt{sel} signal in version v3 results in a slight increase in timing, the benefits it provides in terms of flexibility and functionality can outweigh the trade-offs in many applications. The decision to use the \texttt{sel} signal should be based on a careful analysis of the specific requirements and constraints of the target application.
-
+In conclusion, the Wishbone bus implementation demonstrates a balance between functionality and performance. The decision to use the \texttt{sel} signal should be based on a careful analysis of the specific requirements and constraints of the target application, considering the trade-offs in timing and resource utilization.
 
 
 
