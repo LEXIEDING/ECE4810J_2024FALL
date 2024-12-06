@@ -70,11 +70,14 @@ muzili529@sjtu.edu.cn}
 \maketitle
 
 \begin{abstract}
-This document 
+This document presents the implementation of the Wishbone bus architecture using High-Level Synthesis (HLS). The Wishbone bus protocol, known for its simplicity and flexibility, is widely adopted in System-on-Chip (SoC) designs to enhance the efficiency of data exchange between different Intellectual Property (IP) cores. Our project involved three major versions of the Wishbone bus implementation, each adding new features and improving performance. Version 1 (v1) focused on primitive read/write operations, Version 2 (v2) introduced support for \texttt{BASEADDR}, \texttt{SIZE}, and \texttt{OFFSET}, and Version 3 (v3) added the \texttt{sel} signal for partial byte operations. The implementation was thoroughly tested using Vitis HLS, and performance metrics such as speed, latency, and throughput were analyzed. The introduction of the \texttt{sel} signal in v3 resulted in a slight increase in timing from 12ns to 14ns, highlighting the trade-off between functionality and performance. Future work includes exploring the use of a custom signal line, \texttt{TAGN}, for enhanced debugging, QoS management, security, and protocol extensions. Overall, this project demonstrates the effectiveness of using HLS for designing complex on-chip interconnect architectures, providing a solid foundation for future developments in this area.
+
+The complete source code for this project is available at \url{https://github.com/LEXIEDING/ECE4810J_2024FALL/tree/feat/wishbone}. This repository includes the assignment specification, design ideas, detailed information about the WISHBONE interface and read/write operation logic, RTL and HLS design code, version information (including Vitis Reports, Vivado diagrams, and Vitis Application results), as well as a simple installation guide.
+
 \end{abstract}
 
 \begin{IEEEkeywords}
-Wishbone, 
+Wishbone bus, High-Level Synthesis, System-on-Chip, Vitis HLS, partial byte operations, \texttt{sel} signal, \texttt{TAGN} signal, performance optimization
 \end{IEEEkeywords}
 
 \section{Introduction}
@@ -187,9 +190,9 @@ Each version was thoroughly tested using corresponding testbenches to ensure cor
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.4\textwidth]{v3_vitis_hls_co-simulation_report.png}
-    \caption{Vitis HLS Co-simulation Report for v3}
-    \label{fig:v3_vitis_hls_co-simulation_report}
+    \includegraphics[width=0.4\textwidth]{v3_vitis_hls_interface_definition.png}
+    \caption{Vitis Hls Interface Definition for v3}
+    \label{v3_vitis_hls_interface_definition}
 \end{figure}
 
 \begin{figure}[htbp]
@@ -206,7 +209,7 @@ Each version was thoroughly tested using corresponding testbenches to ensure cor
     \label{fig:v3_implemented_design_highlight}
 \end{figure}
 
-\subsection{RTL Implementation}
+\subsection{Register Transfer Level (RTL) Implementation}
 In the RTL implementation section of our paper, we provide an overview of the hardware description language implementation of the Wishbone interface, designed to facilitate efficient communication between master and slave devices within a System-on-Chip (SoC) environment. The RTL module, `wishbone\_interface`, implements the Wishbone protocol through a series of ports that include clock, reset, cycle, strobe, write enable, address, data input, and output signals, as well as acknowledge and error signals.
 
 The write operation is initiated by the master device at the rising edge of the clock by setting the address, data, and control signals. Upon detecting the command, the slave device responds by latching the data and asserting an acknowledge. The read operation follows a similar pattern, where the master device sets the address and control signals, and the slave provides the data and an acknowledgment. The error signal is utilized to indicate any anomalies occurring during the data transfer process. The corresponding code is shown in Figure \ref{read_write_code}.
@@ -222,14 +225,49 @@ The write operation is initiated by the master device at the rising edge of the 
 
 \section{Methodology}
 
-The methodology for implementing the Wishbone bus architecture using HLS involved several key steps:
+The evaluation methodology of the implemented Wishbone protocol interface is based on a combination of functional testing, coverage analysis, and performance profiling. These steps were designed to ensure that the design is robust, meets functional requirements, and operates efficiently under realistic scenarios.
+
+\subsection{Functional Testing}
+Functional testing was performed to validate the correctness of the design. Test cases covered:
+\begin{itemize}
+    \item Basic read and write operations on the Wishbone master and slave interfaces, verifying correct address and data handling.
+    \item Address decoding logic in the arbiter, ensuring proper routing of transactions to the corresponding slaves based on address ranges.
+    \item Handling of byte select signals (\texttt{sel}) to verify partial data manipulation within the memory.
+    \item Response timing with \texttt{ack} signal assertion to validate synchronous behavior.
+\end{itemize}
+The tests simulated various realistic usage scenarios and edge cases to ensure the design operates correctly under all conditions.
+
+\subsection{Coverage Analysis}
+Code coverage metrics were employed to ensure all logical paths in the design were tested. Special attention was given to:
+\begin{itemize}
+    \item Address boundaries, ensuring transactions targeting out-of-range addresses were correctly handled.
+    \item Read and write operation sequences, confirming consistent data integrity and synchronization.
+    \item Concurrent access scenarios to evaluate arbitration correctness and priority handling.
+\end{itemize}
+
+\subsection{Performance Profiling}
+The performance of the design was profiled to evaluate throughput and latency under varying workloads. By using hardware synthesis tools (e.g., Vivado HLS), latency for data transfers and memory operations was measured. Resource utilization and timing reports were reviewed to identify potential bottlenecks or areas for optimization.
+
+\subsection{Fairness and Validity}
+
+The evaluation methodology aligns closely with the design and implementation of the Wishbone protocol interface to ensure a comprehensive and fair assessment. Specific measures include:
+
+\begin{itemize}
+    \item \textbf{Realistic Testing Scenarios:} The evaluation utilized practical tests covering various address ranges, including valid and invalid memory addresses, as well as boundary conditions. For instance, the code tests write and read operations across slave boundaries (e.g., addresses around 0x00000400) to verify proper arbitration and data integrity.
+    
+    \item \textbf{Full Byte-Select Verification:} The tests included partial byte operations using the \texttt{sel} signal to ensure correct handling of individual bytes. For example, operations like writing to the least significant byte (\texttt{sel = 0x1}) and reading back all bytes were validated to confirm accuracy.
+
+    \item \textbf{Validation Against Protocol Specifications:} The \texttt{ack} signal behavior was explicitly tested to confirm proper acknowledgment of valid transactions and rejection of invalid or out-of-range accesses (e.g., addresses beyond 0x00000800).
+
+    \item \textbf{Edge Case and Error Handling:} The design was subjected to edge cases such as unaligned addresses and simultaneous operations on different slaves to verify robust error handling and arbitration. Invalid conditions were correctly flagged without unintended side effects.
+
+    \item \textbf{Platform-Independent Checks:} The implementation leverages modular functions such as \texttt{write\_data()} and \texttt{read\_data()} to standardize operations, ensuring consistency across various scenarios and hardware configurations.
+
+\end{itemize}
+
+By tailoring the tests to match the specific implementation details, this methodology ensures a valid and unbiased evaluation. The approach systematically covers all potential operational conditions, enhancing confidence in the design's reliability and compliance with the Wishbone protocol.
 
 
-\subsection{Testing and Verification}
-Each version of the implementation was tested using corresponding testbenches written in C. These testbenches simulated various scenarios, including normal operations, boundary conditions, and invalid addresses, to verify the correctness and robustness of the design.
-
-\subsection{Performance Analysis and Optimization}
-Performance metrics such as speed, latency, and throughput were measured to evaluate the efficiency of the Wishbone bus implementation. Optimization strategies were proposed and implemented to address any identified bottlenecks, ensuring that the system met the desired performance standards.
 
 
 
@@ -260,6 +298,13 @@ Performance metrics such as speed, latency, and throughput were measured to eval
 
 \subsubsection{Timing Estimate}
 For versions v1 and v2, the Target Timing Estimate was 12ns. However, with the introduction of the \texttt{sel} signal in version v3, the Target Timing Estimate increased to 14ns. This increase in timing can be attributed to the additional logic required to handle partial byte operations, which introduces more complexity and potential delays in the data path.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.4\textwidth]{v3_vitis_hls_co-simulation_report.png}
+    \caption{Vitis HLS Co-simulation Report for v3}
+    \label{fig:v3_vitis_hls_co-simulation_report}
+\end{figure}
 
 \begin{figure}[h]
     \centering
