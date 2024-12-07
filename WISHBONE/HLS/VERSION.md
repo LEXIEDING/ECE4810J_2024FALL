@@ -90,3 +90,119 @@ write_hw_platform -fixed -include_bit -force -file E:/SJTU/2024Fall/ECE4810J/Fin
 __v3_vitis_application_outcome:__
 
 ![v3_vitis_application_outcome](img/v3_vitis_application_outcome.png)
+
+__v3_interface_specifications:__
+
+```cpp
+#define ADDR_WIDTH 32
+#define DATA_WIDTH 32
+
+const size_t memory_size = 0x00000400 / sizeof(unsigned int);
+
+// Define the Wishbone interface signals
+struct WishboneInterface {
+    bool cyc;    // Cycle signal: indicates the start and end of a bus cycle
+    bool stb;    // Strobe signal: indicates a valid transfer cycle
+    bool we;     // Write enable: indicates a write operation when high
+    unsigned int addr;  // Address: the address for the current operation
+    unsigned int data;  // Data: the data to be written or read
+    unsigned char sel;  // Byte select signal: indicates which bytes are valid
+    bool ack;    // Acknowledge signal: indicates the completion of a transfer
+};
+
+// Define the Wishbone master class
+class WishboneMaster {
+public:
+    WishboneInterface wb;  // Wishbone interface instance
+
+    // Method to perform a write operation
+    void write(unsigned int addr, unsigned int data, unsigned char sel) {
+        ···
+    }
+
+    // Method to perform a read operation
+    unsigned int read(unsigned int addr, unsigned char sel) {
+        ···
+    }
+};
+
+// Define the Wishbone slave class
+class WishboneSlave {
+public:
+    WishboneInterface wb;  // Wishbone interface instance
+    unsigned int memory[memory_size];  // Simple memory model
+    unsigned int baseaddr;  // Base address of the slave
+    unsigned int size;      // Address space size of the slave
+
+    // Method to process read/write operations
+    void process() {
+        ···
+    }
+};
+
+class WishboneArbiter {
+public:
+    WishboneMaster* master;  // Pointer to the Wishbone master
+    WishboneSlave* slave0;   // Pointer to the first Wishbone slave
+    WishboneSlave* slave1;   // Pointer to the second Wishbone slave
+
+    // Method to perform arbitration and route the master's request to the appropriate slave
+    void arbitrate() {
+        // Address decoding to select the appropriate slave based on the address range
+        bool s0_sel = (master->wb.addr >= slave0->baseaddr) && (master->wb.addr < (slave0->baseaddr + slave0->size));
+        bool s1_sel = (master->wb.addr >= slave1->baseaddr) && (master->wb.addr < (slave1->baseaddr + slave1->size));
+
+        // If the address falls within the range of slave0
+        if (s0_sel) {
+            ···
+        }
+        // If the address falls within the range of slave1
+        else if (s1_sel) {
+            ···
+        }
+    }
+};
+
+// Top-level function for HLS synthesis
+extern "C" void hls_top(unsigned int addr, unsigned int data, bool we, bool cyc, bool stb, unsigned char sel, unsigned int* data_out, bool* ack_out) {
+    #pragma HLS INTERFACE s_axilite port=addr bundle=CRTLS
+    #pragma HLS INTERFACE s_axilite port=data bundle=CRTLS
+    #pragma HLS INTERFACE s_axilite port=we bundle=CRTLS
+    #pragma HLS INTERFACE s_axilite port=cyc bundle=CRTLS
+    #pragma HLS INTERFACE s_axilite port=stb bundle=CRTLS
+    #pragma HLS INTERFACE s_axilite port=sel bundle=CRTLS
+    #pragma HLS INTERFACE s_axilite port=data_out bundle=CRTLS
+    #pragma HLS INTERFACE s_axilite port=ack_out bundle=CRTLS
+    #pragma HLS INTERFACE s_axilite port=return bundle=CRTLS
+
+    WishboneMaster master;  // Instantiate Wishbone master
+    WishboneSlave slave0, slave1;  // Instantiate two Wishbone slaves
+    WishboneArbiter arbiter;  // Instantiate Wishbone arbiter
+
+    // Initialize slave base addresses and sizes
+    slave0.baseaddr = 0x00000000;
+    slave0.size = 0x00000400; // 1KB
+    slave1.baseaddr = 0x00000400;
+    slave1.size = 0x00000400; // 1KB
+
+    // Set arbiter connections
+    arbiter.master = &master;
+    arbiter.slave0 = &slave0;
+    arbiter.slave1 = &slave1;
+
+    // Set master interface signals
+    master.wb.addr = addr;
+    master.wb.data = data;
+    master.wb.we = we;
+    master.wb.cyc = cyc;
+    master.wb.stb = stb;
+    master.wb.sel = sel;
+
+    // Perform arbitration and data transfer
+    arbiter.arbitrate();
+
+    // Output the results
+    *data_out = master.wb.data;
+    *ack_out = master.wb.ack;
+}
+```
