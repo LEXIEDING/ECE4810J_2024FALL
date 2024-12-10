@@ -22,4 +22,4 @@ __Group:__
 
 __Individual:__
 
-- [ ] Peer Evaluation
+- [x] Peer Evaluation
