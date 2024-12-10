@@ -51,18 +51,18 @@
 
 \author{
 \IEEEauthorblockN{Lanqi Ding}
-\IEEEauthorblockA{\textit{ShanghaiJiaoTong University} \\
-\textit{UM-Joint Institute}\\
+\IEEEauthorblockA{\textit{Shanghai Jiao Tong University} \\
+\textit{UM-SJTU Joint Institute}\\
 dinglanqi20021215@sjtu.edu.cn}
 \and
 \IEEEauthorblockN{Zhangsiyuan Jin}
-\IEEEauthorblockA{\textit{ShanghaiJiaoTong University} \\
-\textit{UM-Joint Institute}\\
+\IEEEauthorblockA{\textit{Shanghai Jiao Tong University} \\
+\textit{UM-SJTU Joint Institute}\\
 jzsiyuan@sjtu.edu.cn}
 \and
 \IEEEauthorblockN{Muzi Li}
-\IEEEauthorblockA{\textit{ShanghaiJiaoTong University} \\
-\textit{UM-Joint Institute}\\
+\IEEEauthorblockA{\textit{Shanghai Jiao Tong University} \\
+\textit{UM-SJTU Joint Institute}\\
 muzili529@sjtu.edu.cn}
 
 }
@@ -72,7 +72,7 @@ muzili529@sjtu.edu.cn}
 \begin{abstract}
 This document presents the implementation of the Wishbone bus architecture using High-Level Synthesis (HLS). The Wishbone bus protocol, known for its simplicity and flexibility, is widely adopted in System-on-Chip (SoC) designs to enhance the efficiency of data exchange between different Intellectual Property (IP) cores. Our project involved three major versions of the Wishbone bus implementation, each adding new features and improving performance. Version 1 (v1) focused on primitive read/write operations, Version 2 (v2) introduced support for \texttt{BASEADDR}, \texttt{SIZE}, and \texttt{OFFSET}, and Version 3 (v3) added the \texttt{sel} signal for partial byte operations. The implementation was thoroughly tested using Vitis HLS, and performance metrics such as speed, latency, and throughput were analyzed. The introduction of the \texttt{sel} signal in v3 resulted in a slight increase in timing from 12ns to 14ns, highlighting the trade-off between functionality and performance. Future work includes exploring the use of a custom signal line, \texttt{TAGN}, for enhanced debugging, QoS management, security, and protocol extensions. Overall, this project demonstrates the effectiveness of using HLS for designing complex on-chip interconnect architectures, providing a solid foundation for future developments in this area.
 
-The complete source code for this project is available at \url{https://github.com/LEXIEDING/ECE4810J_2024FALL/tree/feat/wishbone}. This repository includes the assignment specification, design ideas, detailed information about the WISHBONE interface and read/write operation logic, RTL and HLS design code, version information (including Vitis Reports, Vivado diagrams, and Vitis Application results), as well as a simple installation guide.
+The complete source code for this project is available at \url{https://github.com/LEXIEDING/ECE4810J_2024FALL/tree/feat/wishbone}. This repository includes the assignment specification, design ideas, detailed information about the WISHBONE interface and read/write operation logic, HLS design code, version information (including Vitis Reports, Vivado diagrams, and Vitis Application results), as well as a simple installation guide.
 
 \end{abstract}
 
@@ -108,11 +108,13 @@ While our work is not entirely novel, it contributes to the existing body of kno
 
 
 \section{Methods}
-In this project, we worked to develop a complete Wishbone bus system by integrating advanced synthesis (HLS) and register transfer level (RTL) design methods. This integration strategy was strategically chosen to take advantage of the efficiency of HLS and the fine control provided by RTL. Our design process follows the guidelines in the Lab1 manual\cite{ECE4810J_FA2024_Lab1} to build a Wishbone IP block.
+In this project, we worked to develop a complete Wishbone bus system by the high level synthesis (HLS) design methods. HLS makes the design faster, allowing us to iterate and evaluate products in a shorter amount of time. Our design process follows the guidelines in the Lab1 manual\cite{ECE4810J_FA2024_Lab1} to build a Wishbone IP block.
 
 \subsection{Overall Design Approach}
 
-In this project, we implemented the Wishbone bus architecture using High-Level Synthesis (HLS) to facilitate the design and verification process. HLS allows us to describe the hardware behavior using high-level programming languages such as C and C++, which are then synthesized into Register Transfer Level (RTL) code. This approach significantly reduces the development time and complexity compared to traditional RTL design. The initial phase of our design utilized HLS rapid prototyping and iterating on high-level abstractions of the Wishbone bus architecture. This allows us to efficiently explore multiple design options and build behavior-level models. After that, we moved into the RTL design phase, working out the hardware details. This included implementing precise control logic and timing constraints that are critical to the proper operation of the Wishbone bus. Our approach ensures a harmonious blend of design efficiency and hardware precision, closely following the Lab1 workflow, which provides the basic framework for our development process. By starting with high-level abstractions and then refining them into detailed RTL, we were able to achieve a more efficient and accurate design process.
+In our project, we utilized High-Level Synthesis (HLS) to implement the Wishbone bus architecture, opting for a streamlined design and verification process. HLS, with its capability to describe hardware behavior using high-level languages like C and C++, significantly reduced our development time and complexity compared to traditional RTL design. By employing HLS for rapid prototyping, we efficiently explored multiple design options and established behavior-level models of the Wishbone bus. This method not only accelerated the design cycle but also ensured a comprehensive understanding and verification of the design before delving into RTL complexities.
+
+Our choice of HLS underscored a commitment to innovation and efficiency, aligning with the industry's trend towards more accessible and faster hardware development methodologies. This approach, while concise, encapsulates the essence of our project's contribution to the field of SoC design.
 
 
 \subsection{Interface Design}
@@ -191,7 +193,7 @@ Each version was thoroughly tested using corresponding testbenches to ensure cor
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{v3_vitis_hls_interface_definition.png}
-    \caption{Vitis Hls Interface Definition for v3}
+    \caption{Vitis HLS Interface Definition for v3}
     \label{v3_vitis_hls_interface_definition}
 \end{figure}
 
@@ -209,17 +211,17 @@ Each version was thoroughly tested using corresponding testbenches to ensure cor
     \label{fig:v3_implemented_design_highlight}
 \end{figure}
 
-\subsection{Register Transfer Level (RTL) Implementation}
-In the RTL implementation section of our paper, we provide an overview of the hardware description language implementation of the Wishbone interface, designed to facilitate efficient communication between master and slave devices within a System-on-Chip (SoC) environment. The RTL module, `wishbone\_interface`, implements the Wishbone protocol through a series of ports that include clock, reset, cycle, strobe, write enable, address, data input, and output signals, as well as acknowledge and error signals.
+% \subsection{Register Transfer Level (RTL) Implementation}
+% In the RTL implementation section of our paper, we provide an overview of the hardware description language implementation of the Wishbone interface, designed to facilitate efficient communication between master and slave devices within a System-on-Chip (SoC) environment. The RTL module, `wishbone\_interface`, implements the Wishbone protocol through a series of ports that include clock, reset, cycle, strobe, write enable, address, data input, and output signals, as well as acknowledge and error signals.
 
-The write operation is initiated by the master device at the rising edge of the clock by setting the address, data, and control signals. Upon detecting the command, the slave device responds by latching the data and asserting an acknowledge. The read operation follows a similar pattern, where the master device sets the address and control signals, and the slave provides the data and an acknowledgment. The error signal is utilized to indicate any anomalies occurring during the data transfer process. The corresponding code is shown in Figure \ref{read_write_code}.
+% The write operation is initiated by the master device at the rising edge of the clock by setting the address, data, and control signals. Upon detecting the command, the slave device responds by latching the data and asserting an acknowledge. The read operation follows a similar pattern, where the master device sets the address and control signals, and the slave provides the data and an acknowledgment. The error signal is utilized to indicate any anomalies occurring during the data transfer process. The corresponding code is shown in Figure \ref{read_write_code}.
 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.4\textwidth]{read_write_code.png}
-    \caption{RTL Code of Read and Write}
-    \label{read_write_code}
-\end{figure}
+% \begin{figure}[htbp]
+%     \centering
+%     \includegraphics[width=0.4\textwidth]{read_write_code.png}
+%     \caption{RTL Code of Read and Write}
+%     \label{read_write_code}
+% \end{figure}
 
 
 
@@ -307,12 +309,35 @@ The Co-simulation Report for version v3 shows a Target Timing Estimate of 14ns, 
 \end{figure}
 
 \subsubsection{Resource Utilization}
-The resource utilization was also analyzed, with the Synthesis Summary Report indicating the use of 375 LUTs and 694 flip-flops for the top module. The process module utilized 94 LUTs and 214 flip-flops. These resource estimates are crucial for understanding the implementation's efficiency and its potential impact on the overall system design.
+The resource utilization was also analyzed, with the Synthesis Summary Report indicating the use of 375 LUTs and 694 flip-flops for the top module. The process module utilized 94 LUTs and 214 flip-flops. These resource estimates are crucial for understanding the implementation's efficiency and its potential impact on the overall system design. And as shown in Figure \ref{v1_ComparedWith_v3},the increase in FFs and LUTs for v3 compared to v1 is a direct result of the additional logic required to support the enhanced features. More complex control mechanisms and data handling lead to higher resource usage.
+Both solutions use the same amount of BRAM, suggesting that the memory requirements have not significantly changed with the added features.
+
 
 \subsubsection{Trade-off Analysis}
-The introduction of the \texttt{sel} signal in version v3, while providing significant benefits in terms of flexibility and functionality, resulted in a slight increase in timing from 12ns to 14ns. This increase can be attributed to the additional logic required to handle partial byte operations, which introduces more complexity and potential delays in the data path.
+The introduction of the \texttt{sel} signal in version v3, while providing significant benefits in terms of flexibility and functionality, resulted in a slight increase in timing from 12ns to 14ns as shown in Figure \ref{v1_ComparedWith_v3}. This increase can be attributed to the additional logic required to handle partial byte operations, which introduces more complexity and potential delays in the data path.
 
-\paragraph{When to Use \texttt{sel} Signal}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth]{v1_ComparedWith_v3.png}
+    \caption{Vitis HLS Comparison Report for v1 and v3}
+    \label{v1_ComparedWith_v3}
+\end{figure}
+
+\subsubsection{Latency}
+v1 has a minimum latency of 2 cycles, which is higher than v3's 1 cycle, indicating that v3 can initiate a new transaction more quickly in the best-case scenario. And the maximum latency for v3 is higher than v1, which is expected due to the additional logic required to handle the sel signal and address decoding based on BASEADDR, SIZE, and OFFSET.
+
+
+The sel signal can be used in many aspects such as Memory-Mapped I/O, Image Processing, Audio Processing and Embedded System as shown in Figure \ref{sel_application}. \cite{mmio}
+
+\begin{figure}[h] 
+    \centering
+    \includegraphics[width=0.4\textwidth]{sel_application-1.png}
+    \includegraphics[width=0.4\textwidth]{sel_application-2.png}
+    \caption{Practical Applications of the sel Signal}
+    \label{sel_application}
+\end{figure}
+
+\textbf{When to Use \texttt{sel} Signal:}
 The \texttt{sel} signal is particularly useful in scenarios where:
 \begin{itemize}
     \item \textbf{Partial Byte Operations}: Applications that require frequent partial byte read/write operations can benefit from the \texttt{sel} signal, as it allows for more efficient data manipulation without the need for additional software handling.
@@ -320,8 +345,48 @@ The \texttt{sel} signal is particularly useful in scenarios where:
     \item \textbf{Performance Optimization}: For applications where the overhead of additional timing is acceptable, the \texttt{sel} signal can provide enhanced functionality and flexibility, leading to overall system performance improvements.
 \end{itemize}
 
+Based on the trade-off, we build a simple model to compare the total operation time with and without the sel signal for different read/write ratios. As shown in Figure \ref{sel}, the time for both read and write operations without the 'sel' signal is assumed to be 36 ns each, calculated as 12 ns multiplied by 3, and the overall equivalent time for an operation without 'sel' includes this duration plus an additional 12 ns dedicated to masking operations. The time for a read operation with the 'sel' signal is calculated as 28 ns, which is 14 ns multiplied by 2, while the time for a write operation with the 'sel' signal is 84 ns, calculated as 14 ns multiplied by 6.
+
+
+\begin{figure}[h] 
+    \centering
+    \includegraphics[width=0.4\textwidth]{sel.png}
+    \caption{Comparison Time within and without sel for Different Read/Write Ratios}
+    \label{sel}
+\end{figure}
+
+
+
 In conclusion, the Wishbone bus implementation demonstrates a balance between functionality and performance. The decision to use the \texttt{sel} signal should be based on a careful analysis of the specific requirements and constraints of the target application, considering the trade-offs in timing and resource utilization.
 
+
+
+\section{Optimization}
+In the optimization segment of our project, we focused on enhancing the performance of the Wishbone bus interface through the implementation of burst operations. The additional signals CTI\_I/O (Cycle Type Identifier) and BTE\_I/O (Burst Type Extension) play a pivotal role in this process. The CTI\_I/O signal is utilized to denote the type of cycle, with specific values, such as '111', indicating the End-of-Burst. Meanwhile, BTE\_I/O is employed to define the burst pattern, whether it's linear or wrap. The burst read and write transactions are shown in Figure \ref{Burst Read Transaction} and \ref{Burst Write Transaction} \cite{csdn84531533}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth]{burst-1.png}
+    \caption{Burst Read Transaction}
+    \label{Burst Read Transaction}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth]{burst-2.png}
+    \caption{Burst Write Transaction}
+    \label{Burst Write Transaction}
+\end{figure}
+
+The implementation steps initiated with the assertion of STB\_O and CYC\_O to start a burst, followed by the negation of WE\_O for read operations or its assertion for write operations. The CTI\_I/O signal is strategically used to signal the cycle type, while BTE\_I/O determines the burst pattern, contributing to the overall efficiency of the data transfer.
+
+The incorporation of burst operations has yielded several benefits, including a significant performance boost due to the reduced number of transactions required for data transfer. It has also led to a reduction in latency, as burst operations minimize the time spent on initiating and concluding data transfers. Furthermore, the efficiency gain is evident in the optimized use of bus bandwidth and reduced idle times. The flexibility of burst operations allows for more complex and variable data access patterns, supporting a wider range of use cases and enhancing the overall complexity of operations that can be managed by the Wishbone bus.
+
+This optimization strategy has been a cornerstone in our project, providing a robust solution that not only meets but exceeds the demands of modern SoC designs where data throughput and system efficiency are paramount.
+
+What's more, TAGN\_I/O (Tag Signals) is not included in our current implementation, but we can enrich our feature set by enabling it for several advanced functionalities.
+
+Implementing TAGN\_I/O introduces a sophisticated error detection and handling mechanism to our system, enabling the tagging and routing of error messages back to their source. This enhancement allows for quicker identification and resolution of issues, thereby improving system reliability. Additionally, TAGN\_I/O facilitates dynamic priority management, which is crucial in multi-tasking environments. By assigning different priorities to various operations, we can ensure that certain tasks are executed in a timely manner, enhancing overall system performance. Furthermore, TAGN\_I/O enables differential data identification, distinguishing between command, status, and payload data transfers. This capability allows the system to process each type of data more efficiently, as it can handle them appropriately according to their nature. In summary, TAGN\_I/O's implementation enriches our system's capabilities by enhancing error handling, managing dynamic priorities, and identifying different data types, leading to improved data processing efficiency and system responsiveness.
 
 
 
@@ -346,7 +411,7 @@ For the successful completion of the Wishbone Bus Implementation project, our te
 
 
 \section{Conclusion}
-
+This project successfully implemented the Wishbone bus architecture and improved design efficiency and performance through advanced integration (HLS) technology. Our work not only demonstrates the effectiveness of designing complex on-chip interconnect architectures using HLS, but also provides a solid foundation for future developments in this area. With three major versions of the Wishbone bus implementation, we have progressively added new features and improved performance. v1 focused on basic read and write operations, v2 introduced support for BASEADDR, SIZE, and OFFSET, and v3 added sel signals to support partial byte operations. Implementation tests and performance analysis with Vitis HLS show that the introduction of sel signals, while increasing the timing from 12ns to 14ns, is a necessary trade-off between functionality and performance. Our work not only implements the Wishbone bus, but also explores future extensions such as TAGN signaling and burst operations to enhance system performance and reliability. Overall, our project strikes a balance between functionality and performance, providing a comprehensive evaluation and effective solution for the Wishbone bus protocol interface in SoC design.
 
 
 
